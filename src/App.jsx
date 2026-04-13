@@ -1,56 +1,158 @@
-﻿import { useChat } from './hooks/useChat';
-import { useHistory } from './hooks/useHistory';
-import { Layout } from './components/layout/Layout';
+﻿import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
+import { Sidebar } from './components/layout/Sidebar';
+import { ActionButtons } from './components/ActionCard';
+import TopicChips from './components/TopicChips';
+import ProblemInput from './components/ProblemInput';
+import { ChatMessage } from './components/ChatMessage';
+import { useAppStore } from './store/appStore';
+import { solveProblem } from './api/backend';
 
 export default function App() {
-  const {
-    grade,
-    setGrade,
-    problem,
-    setProblem,
-    messages,
-    currentStage,
-    isLoading,
-    hasStarted,
-    handleAsk,
-    handleNext,
-    handleReset,
-  } = useChat();
+  const [problem, setProblem] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { messages, addMessage, currentMode, setCurrentMode, grade, isLoading, setIsLoading, clearMessages } = useAppStore();
 
-  const { addToHistory } = useHistory();
+  const handleSolve = async (userProblem) => {
+    if (!userProblem.trim()) return;
 
-  const handleSelectFromHistory = (selectedProblem) => {
-    setProblem(selectedProblem);
+    // Add user message
+    addMessage('user', userProblem);
+    setProblem('');
+    setIsLoading(true);
+
+    try {
+      const response = await solveProblem(userProblem, grade, currentMode);
+      if (response.success) {
+        addMessage('assistant', response.solution);
+      } else {
+        addMessage('assistant', `Error: ${response.error || 'Could not generate solution'}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      addMessage('assistant', 'Error: Could not process your request. Make sure the backend server is running on port 5000.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleAskWrapper = (problemText) => {
-    addToHistory(problemText, grade);
-    handleAsk(problemText);
+  const handleTopicSelect = (topic) => {
+    setProblem(`Solve a problem related to ${topic}`);
   };
 
-  const handleNextWrapper = (stage) => {
-    if (stage === 'hint') {
-      handleNext('nextStep');
-    } else if (stage === 'nextStep') {
-      handleNext('solution');
+  const handleActionSelect = (action) => {
+    setCurrentMode(action);
+    if (messages.length > 0) {
+      // Re-solve with new mode
+      const lastUserMessage = [...messages].reverse().find(m => m.role === 'user');
+      if (lastUserMessage) {
+        clearMessages();
+        handleSolve(lastUserMessage.content);
+      }
     }
   };
 
   return (
-    <Layout
-      grade={grade}
-      setGrade={setGrade}
-      problem={problem}
-      setProblem={setProblem}
-      messages={messages}
-      currentStage={currentStage}
-      isLoading={isLoading}
-      hasStarted={hasStarted}
-      onAsk={handleAskWrapper}
-      onNewProblem={handleReset}
-      onNextStep={handleNextWrapper}
-      onSelectFromHistory={handleSelectFromHistory}
-    />
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white overflow-x-hidden">
+      {/* Background glow effect */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl opacity-20" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl opacity-20" />
+      </div>
+
+      {/* Layout */}
+      <div className="flex h-screen relative z-10">
+        {/* Sidebar */}
+        <div className="hidden md:block md:w-64">
+          <Sidebar isOpen={false} onClose={() => {}} />
+        </div>
+
+        {/* Mobile Sidebar */}
+        <div className="md:hidden">
+          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Header */}
+          <div className="border-b border-slate-800 px-4 py-3 flex items-center justify-between md:hidden">
+            <h1 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+              MathMind
+            </h1>
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 hover:bg-slate-800 rounded-lg transition"
+            >
+              {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+
+          {/* Content Area */}
+          <div className="flex-1 overflow-y-auto">
+            {messages.length === 0 ? (
+              // Home Screen
+              <div className="h-full flex flex-col items-center justify-center px-4 py-12">
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-center mb-8 max-w-2xl"
+                >
+                  <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-purple-300 via-pink-300 to-blue-300 bg-clip-text text-transparent">
+                    What do you want to solve today?
+                  </h2>
+                  <p className="text-slate-400 text-lg">
+                    Hints first. Answers later. Learn the why.
+                  </p>
+                </motion.div>
+
+                {/* Action Cards */}
+                <div className="mb-12">
+                  <ActionButtons onSelect={handleActionSelect} />
+                </div>
+
+                {/* Topics */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="w-full max-w-2xl mb-8"
+                >
+                  <p className="text-sm font-semibold text-slate-400 mb-3 text-center">
+                    EXPLORE TOPICS
+                  </p>
+                  <TopicChips onSelect={handleTopicSelect} />
+                </motion.div>
+              </div>
+            ) : (
+              // Chat Screen
+              <div className="max-w-2xl mx-auto px-4 pt-6 pb-32">
+                {messages.map((msg) => (
+                  <ChatMessage key={msg.id} message={msg} />
+                ))}
+                {isLoading && (
+                  <ChatMessage
+                    message={{ role: 'assistant', content: '', type: 'text' }}
+                    isLoading={true}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Input - Fixed at bottom */}
+          <div className="fixed md:relative bottom-0 left-0 right-0 md:left-auto md:mr-0 border-t border-slate-800 bg-gradient-to-t from-slate-950/95 to-slate-950/50 p-4 backdrop-blur">
+            <ProblemInput
+              problem={problem}
+              setProblem={setProblem}
+              onSubmit={() => handleSolve(problem)}
+              isLoading={isLoading}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
