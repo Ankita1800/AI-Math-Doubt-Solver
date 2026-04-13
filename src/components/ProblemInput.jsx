@@ -16,12 +16,12 @@ export default function ProblemInput({ problem, setProblem, onSubmit, isLoading 
     <form onSubmit={(e) => {
       e.preventDefault();
       onSubmit();
-    }} className="w-full max-w-2xl mx-auto px-4">
+    }} className="w-full flex justify-center">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="relative group"
+        className="relative group w-full max-w-2xl px-4"
       >
         {/* Gradient background effect */}
         <div
@@ -29,29 +29,30 @@ export default function ProblemInput({ problem, setProblem, onSubmit, isLoading 
           style={{ zIndex: -1 }}
         />
 
-        <div className="relative flex items-center gap-3 px-5 py-3 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700 group-hover:border-slate-600 transition">
+        <div className="relative flex items-center gap-3 px-5 py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700 group-hover:border-slate-600 transition">
           <input
             type="text"
             value={problem}
             onChange={(e) => setProblem(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your math problem... (e.g., Solve: 2x² + 5x − 3 = 0)"
-            className="flex-1 bg-transparent text-white placeholder-slate-500 focus:outline-none text-sm"
+            className="flex-1 bg-transparent text-white placeholder-slate-500 text-sm sm:text-base focus:outline-none"
             disabled={isLoading}
           />
 
           <motion.button
             type="submit"
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
             disabled={isLoading || !problem.trim()}
             className="
-              p-2 rounded-lg
+              p-2 sm:p-2.5 rounded-lg
               bg-gradient-to-r from-purple-500 to-pink-500
               text-white font-semibold
               hover:shadow-lg hover:shadow-purple-500/50
               disabled:opacity-50 disabled:cursor-not-allowed
               transition-all duration-200
+              flex-shrink-0
             "
           >
             {isLoading ? (

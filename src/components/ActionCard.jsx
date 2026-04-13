@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Lightbulb, ChevronRight, CheckCircle2 } from 'lucide-react';
-import { useAppStore } from '../../store/appStore';
+import { useAppStore } from '../store/appStore';
 
 const ACTIONS = [
   {
@@ -33,7 +33,7 @@ export function ActionButtons({ onSelect }) {
   const { currentMode } = useAppStore();
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl">
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full">
       {ACTIONS.map((action, index) => {
         const Icon = action.icon;
         const isActive = currentMode === action.id;
@@ -43,10 +43,14 @@ export function ActionButtons({ onSelect }) {
             key={action.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
+            transition={{ delay: index * 0.1, duration: 0.4 }}
+            whileHover={{ scale: 1.05, translateY: -4 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => onSelect(action.id)}
             className={`
-              relative group p-4 rounded-2xl overflow-hidden
+              relative group
+              w-full sm:w-32 md:w-36
+              p-4 rounded-2xl overflow-hidden
               transition-all duration-300
               ${
                 isActive
@@ -54,6 +58,7 @@ export function ActionButtons({ onSelect }) {
                   : 'bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700'
               }
               hover:shadow-lg hover:border-slate-600
+              flex flex-col items-center justify-center gap-2
             `}
           >
             {/* Background glow effect */}
@@ -70,18 +75,18 @@ export function ActionButtons({ onSelect }) {
             {/* Content */}
             <div className="relative flex flex-col items-center gap-2 text-center">
               <motion.div
-                animate={isActive ? { scale: 1.1 } : { scale: 1 }}
+                animate={isActive ? { scale: 1.2 } : { scale: 1 }}
                 transition={{ duration: 0.2 }}
               >
                 <Icon
-                  className={`w-6 h-6 ${
+                  className={`w-6 h-6 sm:w-7 sm:h-7 ${
                     isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-300'
                   }`}
                 />
               </motion.div>
 
               <div>
-                <h3 className={`font-semibold text-sm ${isActive ? 'text-white' : 'text-slate-200'}`}>
+                <h3 className={`font-semibold text-sm sm:text-base ${isActive ? 'text-white' : 'text-slate-200'}`}>
                   {action.label}
                 </h3>
                 <p className={`text-xs ${isActive ? 'text-white/80' : 'text-slate-400'}`}>
