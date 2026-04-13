@@ -1,0 +1,114 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist
+dist-ssr
+build
+*.local
+
+# Scratch/test files
+scratch/
+test.js
+*.test.js
+*.spec.js
+
+# Environment variables - CRITICAL
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.development.local
+
+# Sensitive files and credentials - CRITICAL
+*.pem
+*.key
+*.secret
+.credentials.*
+secrets/
+*.p12
+*.pfx
+*.jks
+.aws/credentials
+.aws/config
+
+# API Keys and tokens - CRITICAL
+config.json
+config.local.json
+constants.local.js
+apikey.txt
+token.txt
+
+# IDE and editor directories
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+*.sublime-workspace
+*.sublime-project
+.history/
+.vscode-test
+.screencastify
+
+# OS files
+Thumbs.db
+.DS_Store
+ehthumbs.db
+[Dd]esktop.ini
+
+# IDE specific
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.vs/
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+.Jest_cache/
+
+# Temporary files
+*.tmp
+.cache/
+.parcel-cache/
+dist-ssr/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Node
+npm-debug.log
+.node_repl_history
+
+# Config
+config/secrets.json
+.env.*.local
+
+# OS files
+Thumbs.db
+
