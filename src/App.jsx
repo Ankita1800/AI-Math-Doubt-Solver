@@ -63,20 +63,13 @@ export default function App() {
 
       {/* Layout */}
       <div className="flex h-screen relative z-10">
-        {/* Desktop Sidebar - Always visible */}
-        <div className="hidden lg:flex lg:w-64 flex-col">
-          <Sidebar isOpen={true} onClose={() => {}} />
-        </div>
-
-        {/* Mobile/Tablet Sidebar - Toggle drawer */}
-        <div className="lg:hidden">
-          {sidebarOpen && <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
-        </div>
+        {/* Sidebar - Now handles its own responsive behavior */}
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Header - Mobile only */}
-          <div className="border-b border-slate-800 px-4 py-3 flex items-center justify-between lg:hidden">
+          {/* Header */}
+          <div className="border-b border-slate-800 px-4 py-3 flex items-center justify-between md:hidden">
             <h1 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
               MathMind
             </h1>
