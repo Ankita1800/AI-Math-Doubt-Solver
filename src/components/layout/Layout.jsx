@@ -43,7 +43,7 @@ export function Layout({ children }) {
             width: desktopSidebarState === 'open' ? '16rem' : desktopSidebarState === 'collapsed' ? '4rem' : '0rem',
           }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="hidden md:flex flex-col h-screen transition-all duration-300 relative z-20"
+          className="hidden md:flex flex-col h-screen overflow-hidden relative z-20"
         >
           <Sidebar
             isOpen={true}

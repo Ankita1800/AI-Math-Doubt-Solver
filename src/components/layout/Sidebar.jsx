@@ -15,11 +15,11 @@ export function Sidebar({ isOpen, onClose, isCollapsed = false, onToggleCollapse
       {/* Desktop Sidebar Container */}
       {!isMobile && (
         <div
-          className={`w-full h-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950
-          border-r border-slate-800 overflow-y-auto flex flex-col transition-all duration-300`}
+          className="w-full h-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950
+          border-r border-slate-800 overflow-hidden flex flex-col transition-all duration-300"
         >
           {/* Header */}
-          <div className="p-4 border-b border-slate-800 flex items-center justify-between gap-3">
+          <div className="p-4 border-b border-slate-800 flex items-center justify-between gap-2 flex-shrink-0 min-w-0">
             {!isCollapsed && (
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
@@ -57,7 +57,7 @@ export function Sidebar({ isOpen, onClose, isCollapsed = false, onToggleCollapse
           </div>
 
           {/* Menu */}
-          <nav className="p-2 space-y-1">
+          <nav className="p-2 space-y-1 min-w-0 flex-shrink-0">
             {MENU_ITEMS.map((item) => {
               const Icon = item.icon;
               return (
@@ -66,8 +66,8 @@ export function Sidebar({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                   whileHover={{ x: isCollapsed ? 0 : 4 }}
                   whileTap={{ scale: 0.98 }}
                   className={`
-                    w-full flex items-center gap-3 px-3 py-2 rounded-xl
-                    transition-all duration-200
+                    w-full flex items-center gap-2 px-3 py-2 rounded-xl
+                    transition-all duration-200 flex-shrink-0 min-w-0
                     ${
                       item.active
                         ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border border-purple-500/30'
@@ -82,7 +82,7 @@ export function Sidebar({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="text-sm font-medium truncate"
+                      className="text-sm font-medium truncate flex-shrink-0"
                     >
                       {item.label}
                     </motion.span>
@@ -103,7 +103,7 @@ export function Sidebar({ isOpen, onClose, isCollapsed = false, onToggleCollapse
           </div>
 
           {/* History Section */}
-          <div className="flex-1 border-t border-slate-800 overflow-y-auto">
+          <div className="flex-1 border-t border-slate-800 overflow-y-auto min-w-0">
             {!isCollapsed && (
               <div className="p-3">
                 <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
