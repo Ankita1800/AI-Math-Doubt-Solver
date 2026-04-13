@@ -22,23 +22,143 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
             width: '100%',
           }}
         >
-          {/* Header */}
-          <div
-            className="border-b border-slate-800 flex-shrink-0"
-            style={{
-              padding: isExpanded ? '16px' : '16px 8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: isExpanded ? 'space-between' : 'center',
-            }}
-          >
+          {/* EXPANDED LAYOUT */}
+          {isExpanded && (
+            <>
+              {/* Header */}
+              <div
+                className="border-b border-slate-800 flex-shrink-0"
+                style={{
+                  padding: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                  }}
+                >
+                  <div
+                    className="rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                    }}
+                  >
+                    <span className="text-lg font-bold text-white">M</span>
+                  </div>
+
+                  <div style={{ whiteSpace: 'nowrap', minWidth: 0 }}>
+                    <p className="text-sm font-bold text-white truncate">MathMind</p>
+                    <p className="text-xs text-slate-400 truncate">AI Tutor</p>
+                  </div>
+                </div>
+
+                {/* Toggle Button */}
+                <button
+                  onClick={onToggleCollapse}
+                  className="p-1 hover:bg-slate-800 rounded-lg flex-shrink-0"
+                  title="Collapse"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Menu */}
+              <nav className="p-2 space-y-1 flex-shrink-0">
+                {MENU_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      className={`w-full rounded-xl flex-shrink-0 ${
+                        item.active
+                          ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border border-purple-500/30'
+                          : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/50'
+                      }`}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        padding: '10px 14px',
+                        gap: '8px',
+                      }}
+                    >
+                      <Icon className="w-5 h-5 flex-shrink-0" />
+                      <span className="text-sm font-medium truncate flex-shrink-0">
+                        {item.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </nav>
+
+              {/* Grade Selector Section */}
+              <div
+                style={{
+                  borderTop: '1px solid rgb(30, 41, 59)',
+                  flexShrink: 0,
+                  padding: '12px',
+                }}
+              >
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
+                  Current Grade
+                </p>
+                <GradeSelectorPills isCompact={false} />
+              </div>
+
+              {/* History Section */}
+              <div
+                style={{
+                  borderTop: '1px solid rgb(30, 41, 59)',
+                  flex: 1,
+                  padding: '12px',
+                  overflow: 'hidden',
+                }}
+              >
+                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
+                  Recent Problems
+                </h3>
+                <div className="flex flex-col items-center justify-center py-8 text-center">
+                  <p className="text-xs text-slate-500">No history yet</p>
+                  <p className="text-xs text-slate-600 mt-1">Start solving</p>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div
+                style={{
+                  borderTop: '1px solid rgb(30, 41, 59)',
+                  flexShrink: 0,
+                  textAlign: 'center',
+                  padding: '12px',
+                }}
+              >
+                <p className="text-xs text-slate-500 italic">
+                  Hints first.<br />Answers later.
+                </p>
+              </div>
+            </>
+          )}
+
+          {/* COLLAPSED LAYOUT - MINIMAL ICON RAIL */}
+          {isCollapsed && (
             <div
               style={{
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
-                gap: isExpanded ? '12px' : '0',
+                gap: '20px',
+                paddingTop: '12px',
+                height: '100%',
+                paddingBottom: '12px',
               }}
             >
+              {/* Header Avatar */}
               <div
                 className="rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0"
                 style={{
@@ -49,166 +169,55 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                 <span className="text-lg font-bold text-white">M</span>
               </div>
 
-              {/* Header Text */}
-              <div
+              {/* Nav Icons */}
+              <nav
                 style={{
-                  opacity: isExpanded ? 1 : 0,
-                  transform: isExpanded ? 'translateX(0)' : 'translateX(-10px)',
-                  transition: 'opacity 0.15s ease, transform 0.2s ease',
-                  pointerEvents: isExpanded ? 'auto' : 'none',
-                  whiteSpace: 'nowrap',
-                  minWidth: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                  alignItems: 'center',
                 }}
               >
-                <p className="text-sm font-bold text-white truncate">MathMind</p>
-                <p className="text-xs text-slate-400 truncate">AI Tutor</p>
-              </div>
-            </div>
+                {MENU_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      className={`rounded-lg flex items-center justify-center flex-shrink-0 ${
+                        item.active
+                          ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border border-purple-500/30'
+                          : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/50'
+                      }`}
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                      title={item.label}
+                    >
+                      <Icon className="w-5 h-5" />
+                    </button>
+                  );
+                })}
+              </nav>
 
-            {/* Toggle Button */}
-            <button
-              onClick={onToggleCollapse}
-              className="p-1 hover:bg-slate-800 rounded-lg flex-shrink-0"
-              style={{
-                opacity: isExpanded ? 1 : 0,
-                transform: isExpanded ? 'translateX(0)' : 'translateX(10px)',
-                transition: 'opacity 0.15s ease, transform 0.2s ease',
-                pointerEvents: isExpanded ? 'auto' : 'none',
-              }}
-              title={isExpanded ? 'Collapse' : 'Expand'}
-            >
-              {isExpanded ? (
-                <ChevronLeft className="w-4 h-4" />
-              ) : (
+              {/* Toggle Button - Bottom */}
+              <button
+                onClick={onToggleCollapse}
+                className="p-1 hover:bg-slate-800 rounded-lg flex-shrink-0 mt-auto"
+                title="Expand"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <ChevronRight className="w-4 h-4" />
-              )}
-            </button>
-
-            {/* Centered toggle for collapsed state */}
-            <button
-              onClick={onToggleCollapse}
-              className="p-1 hover:bg-slate-800 rounded-lg flex-shrink-0"
-              style={{
-                opacity: isExpanded ? 0 : 1,
-                transform: isExpanded ? 'translateX(-10px)' : 'translateX(0)',
-                transition: 'opacity 0.15s ease, transform 0.2s ease',
-                pointerEvents: isExpanded ? 'none' : 'auto',
-                position: isExpanded ? 'absolute' : 'relative',
-              }}
-              title={isExpanded ? 'Collapse' : 'Expand'}
-            >
-              {isExpanded ? (
-                <ChevronLeft className="w-4 h-4" />
-              ) : (
-                <ChevronRight className="w-4 h-4" />
-              )}
-            </button>
-          </div>
-
-          {/* Menu */}
-          <nav className="p-2 space-y-1 flex-shrink-0">
-            {MENU_ITEMS.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  className={`rounded-xl flex-shrink-0 ${
-                    item.active
-                      ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border border-purple-500/30'
-                      : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/50'
-                  }`}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    width: '100%',
-                    justifyContent: isExpanded ? 'flex-start' : 'center',
-                    padding: isExpanded ? '10px 14px' : '10px 0',
-                    gap: isExpanded ? '8px' : '0',
-                  }}
-                  title={isExpanded ? '' : item.label}
-                >
-                  <Icon className="w-5 h-5 flex-shrink-0" />
-
-                  {/* Menu Text */}
-                  <span
-                    className="text-sm font-medium truncate flex-shrink-0"
-                    style={{
-                      opacity: isExpanded ? 1 : 0,
-                      transform: isExpanded ? 'translateX(0)' : 'translateX(-10px)',
-                      transition: 'opacity 0.15s ease, transform 0.2s ease',
-                      pointerEvents: isExpanded ? 'auto' : 'none',
-                      whiteSpace: 'nowrap',
-                      minWidth: 0,
-                    }}
-                  >
-                    {item.label}
-                  </span>
-                </button>
-              );
-            })}
-          </nav>
-
-          {/* Grade Selector Section */}
-          <div
-            style={{
-              opacity: isExpanded ? 1 : 0,
-              maxHeight: isExpanded ? '500px' : '0px',
-              overflow: 'hidden',
-              pointerEvents: isExpanded ? 'auto' : 'none',
-              transition: 'opacity 0.15s ease 0.05s, max-height 0.2s ease',
-              borderTop: '1px solid rgb(30, 41, 59)',
-              flexShrink: 0,
-            }}
-          >
-            <div style={{ padding: '12px 12px' }}>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
-                Current Grade
-              </p>
-              <GradeSelectorPills isCompact={false} />
+              </button>
             </div>
-          </div>
-
-          {/* History Section */}
-          <div
-            style={{
-              opacity: isExpanded ? 1 : 0,
-              maxHeight: isExpanded ? '500px' : '0px',
-              overflow: 'hidden',
-              pointerEvents: isExpanded ? 'auto' : 'none',
-              transition: 'opacity 0.15s ease 0.05s, max-height 0.2s ease',
-              borderTop: '1px solid rgb(30, 41, 59)',
-              flex: 1,
-            }}
-          >
-            <div style={{ padding: '12px' }}>
-              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
-                Recent Problems
-              </h3>
-              <div className="flex flex-col items-center justify-center py-8 text-center">
-                <p className="text-xs text-slate-500">No history yet</p>
-                <p className="text-xs text-slate-600 mt-1">Start solving</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div
-            style={{
-              opacity: isExpanded ? 1 : 0,
-              maxHeight: isExpanded ? '100px' : '0px',
-              overflow: 'hidden',
-              pointerEvents: isExpanded ? 'auto' : 'none',
-              transition: 'opacity 0.15s ease 0.05s, max-height 0.2s ease',
-              borderTop: '1px solid rgb(30, 41, 59)',
-              flexShrink: 0,
-              textAlign: 'center',
-              padding: '12px',
-            }}
-          >
-            <p className="text-xs text-slate-500 italic">
-              Hints first.<br />Answers later.
-            </p>
-          </div>
+          )}
         </div>
       )}
 
