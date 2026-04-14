@@ -79,22 +79,20 @@ export function ActionButtons({ onSelect }) {
                 />
               </motion.div>
 
-              <div className="no-underline">
-                <h3 className={`font-semibold text-sm sm:text-base transition-colors duration-300 ${isActive ? 'text-black' : 'text-gray-400 group-hover:text-gray-300'}`}>
+              <div className="no-underline flex flex-col items-center gap-2" style={{ textDecoration: 'none' }}>
+                <h3 
+                  className={`font-semibold text-sm sm:text-base transition-colors duration-300 no-underline ${isActive ? 'text-black' : 'text-gray-400 group-hover:text-gray-300'}`}
+                  style={{ textDecoration: 'none', textDecorationLine: 'none' }}
+                >
                   {action.label}
                 </h3>
-                <p className={`text-xs transition-colors duration-300 ${isActive ? 'text-black/70' : 'text-gray-600 group-hover:text-gray-500'}`}>
+                <p 
+                  className={`text-xs transition-colors duration-300 no-underline ${isActive ? 'text-black/70' : 'text-gray-600 group-hover:text-gray-500'}`}
+                  style={{ textDecoration: 'none', textDecorationLine: 'none' }}
+                >
                   {action.description}
                 </p>
               </div>
-
-              {isActive && (
-                <motion.div
-                  layoutId="activeIndicator"
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-black"
-                  transition={{ duration: 0.3 }}
-                />
-              )}
             </div>
           </motion.button>
         );
