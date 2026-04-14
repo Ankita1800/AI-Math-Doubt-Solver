@@ -1,18 +1,18 @@
 const STAGE_BADGES = {
   hint: {
     label: '💡 Hint',
-    className: 'bg-amber-50 text-amber-700 border-amber-200',
-    borderColor: 'border-l-amber-400',
+    className: 'bg-white text-black border-gray-300',
+    borderColor: 'border-l-white',
   },
   nextStep: {
     label: '📐 Next Step',
-    className: 'bg-blue-50 text-blue-700 border-blue-200',
-    borderColor: 'border-l-blue-400',
+    className: 'bg-white text-black border-gray-300',
+    borderColor: 'border-l-white',
   },
   solution: {
     label: '✅ Full Solution',
-    className: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    borderColor: 'border-l-emerald-400',
+    className: 'bg-white text-black border-gray-300',
+    borderColor: 'border-l-white',
   },
 };
 
@@ -34,9 +34,9 @@ export default function MessageBubble({ message }) {
       <div className="flex justify-end animate-fade-in-up">
         <div
           className="
-            max-w-[85%] bg-indigo-600 text-white
+            max-w-[85%] bg-white text-black
             rounded-2xl rounded-br-sm
-            px-5 py-3.5 shadow-md shadow-indigo-100
+            px-5 py-3.5 shadow-md
             text-sm leading-relaxed
           "
         >
@@ -51,7 +51,7 @@ export default function MessageBubble({ message }) {
 
   return (
     <div className="flex items-start gap-3 animate-fade-in-up">
-      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-sm mt-1">
+      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-sm mt-1">
         🧠
       </div>
       <div
@@ -60,7 +60,7 @@ export default function MessageBubble({ message }) {
           rounded-2xl rounded-tl-sm
           px-5 py-4 shadow-sm
           border border-gray-100
-          border-l-4 ${badge?.borderColor || 'border-l-indigo-300'}
+          border-l-4 ${badge?.borderColor || 'border-l-white'}
         `}
       >
         {badge && (

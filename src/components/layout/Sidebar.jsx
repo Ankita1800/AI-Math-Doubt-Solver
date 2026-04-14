@@ -75,13 +75,13 @@ function HistoryActionMenu({ item, isOpen, buttonRef, onRename, onShare, onDelet
         left: `${position.left}px`,
         zIndex: 9999,
       }}
-      className="bg-slate-800 rounded-lg border border-slate-700 shadow-xl animate-in fade-in slide-in-from-top-1 duration-200 w-48"
+      className="bg-gray-950 rounded-lg border border-gray-800 shadow-xl animate-in fade-in slide-in-from-top-1 duration-200 w-48"
     >
       <button
         onClick={() => {
           onRename(item);
         }}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-colors first:rounded-t-lg whitespace-nowrap"
+        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:bg-gray-900 hover:text-white transition-colors first:rounded-t-lg whitespace-nowrap"
       >
         <Edit2 className="w-4 h-4 flex-shrink-0" />
         Rename
@@ -90,7 +90,7 @@ function HistoryActionMenu({ item, isOpen, buttonRef, onRename, onShare, onDelet
         onClick={() => {
           onShare(item);
         }}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-colors whitespace-nowrap"
+        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:bg-gray-900 hover:text-white transition-colors whitespace-nowrap"
       >
         <Share2 className="w-4 h-4 flex-shrink-0" />
         Share
@@ -99,7 +99,7 @@ function HistoryActionMenu({ item, isOpen, buttonRef, onRename, onShare, onDelet
         onClick={() => {
           onDelete(item.id);
         }}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-colors last:rounded-b-lg whitespace-nowrap"
+        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:bg-gray-900 hover:text-white transition-colors last:rounded-b-lg whitespace-nowrap"
       >
         <Trash2 className="w-4 h-4 flex-shrink-0" />
         Delete
@@ -126,23 +126,23 @@ function DeleteConfirmationModal({ item, isOpen, onConfirm, onCancel }) {
       
       {/* Modal */}
       <div
-        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] bg-slate-800 rounded-lg border border-slate-700 shadow-2xl p-4 w-96 max-w-[90vw] animate-in fade-in slide-in-from-bottom-4 duration-200"
+        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] bg-gray-950 rounded-lg border border-gray-800 shadow-2xl p-4 w-96 max-w-[90vw] animate-in fade-in slide-in-from-bottom-4 duration-200"
       >
-        <h2 className="text-sm font-semibold text-slate-100 mb-2">Delete Chat</h2>
-        <p className="text-sm text-slate-400 mb-6">
-          Are you sure you want to delete <span className="font-medium text-slate-200">"{item.title}"</span>? This action cannot be undone.
+        <h2 className="text-sm font-semibold text-white mb-2">Delete Chat</h2>
+        <p className="text-sm text-gray-400 mb-6">
+          Are you sure you want to delete <span className="font-medium text-gray-200">"{item.title}"</span>? This action cannot be undone.
         </p>
         
         <div className="flex gap-2 justify-end">
           <button
             onClick={onCancel}
-            className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm font-medium text-slate-200 transition-colors"
+            className="px-4 py-2 bg-gray-900 hover:bg-gray-800 rounded-lg text-sm font-medium text-gray-200 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium text-white transition-colors"
+            className="px-4 py-2 bg-white hover:bg-gray-100 rounded-lg text-sm font-medium text-black transition-colors"
           >
             Delete
           </button>
@@ -230,7 +230,7 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
     <>
       {!isMobile && (
         <div
-          className="h-full flex flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"
+          className="h-full flex flex-col bg-black"
           style={{
             overflow: 'hidden',
             width: '100%',
@@ -241,7 +241,7 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
             <>
               {/* Header */}
               <div
-                className="border-b border-slate-800 flex-shrink-0"
+                className="border-b border-gray-900 flex-shrink-0"
                 style={{
                   padding: '16px',
                   display: 'flex',
@@ -257,25 +257,25 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                   }}
                 >
                   <div
-                    className="rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0"
+                    className="rounded-xl bg-white flex items-center justify-center flex-shrink-0"
                     style={{
                       width: '40px',
                       height: '40px',
                     }}
                   >
-                    <span className="text-lg font-bold text-white">M</span>
+                    <span className="text-lg font-bold text-black">M</span>
                   </div>
 
                   <div style={{ whiteSpace: 'nowrap', minWidth: 0 }}>
                     <p className="text-sm font-bold text-white truncate">MathMind</p>
-                    <p className="text-xs text-slate-400 truncate">AI Tutor</p>
+                    <p className="text-xs text-gray-500 truncate">AI Tutor</p>
                   </div>
                 </div>
 
                 {/* Toggle Button */}
                 <button
                   onClick={onToggleCollapse}
-                  className="p-1 hover:bg-slate-800 rounded-lg flex-shrink-0"
+                  className="p-1 hover:bg-gray-900 rounded-lg flex-shrink-0"
                   title="Collapse"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -291,8 +291,8 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                       key={item.id}
                       className={`w-full rounded-xl flex-shrink-0 ${
                         item.active
-                          ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border border-purple-500/30'
-                          : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/50'
+                          ? 'bg-white text-black border border-white'
+                          : 'text-gray-600 hover:text-white hover:bg-gray-900/50'
                       }`}
                       style={{
                         display: 'flex',
@@ -314,12 +314,12 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
               {/* Grade Selector Section - Vertical Stack */}
               <div
                 style={{
-                  borderTop: '1px solid rgb(30, 41, 59)',
+                  borderTop: '1px solid rgb(42, 42, 42)',
                   flexShrink: 0,
                   padding: '12px',
                 }}
               >
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">
                   Current Grade
                 </p>
                 <div className="flex flex-col gap-2">
@@ -329,8 +329,8 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                       onClick={() => setGrade(g.id)}
                       className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                         grade === g.id
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                          : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                          ? 'bg-white text-black shadow-lg'
+                          : 'bg-gray-900 text-gray-400 hover:bg-gray-800'
                       }`}
                     >
                       {g.label}
@@ -342,7 +342,7 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
               {/* History Section - Dynamic Chat List */}
               <div
                 style={{
-                  borderTop: '1px solid rgb(30, 41, 59)',
+                  borderTop: '1px solid rgb(42, 42, 42)',
                   flex: 1,
                   padding: '12px',
                   overflow: 'hidden',
@@ -350,20 +350,20 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                   flexDirection: 'column',
                 }}
               >
-                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">
                   Chat History
                 </h3>
                 
                 {history.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-8 text-center">
-                    <p className="text-xs text-slate-500">No chats yet</p>
-                    <p className="text-xs text-slate-600 mt-1">Start solving</p>
+                    <p className="text-xs text-gray-600">No chats yet</p>
+                    <p className="text-xs text-gray-700 mt-1">Start solving</p>
                   </div>
                 ) : (
                   <div className="flex-1 overflow-y-auto space-y-2 pr-2">
                     {history.map((item) => (
                       <div key={item.id} className="relative group">
-                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
+                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-900 transition-colors">
                           <div className="flex-1 min-w-0">
                             {renameId === item.id ? (
                               <input
@@ -375,14 +375,14 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                                   if (e.key === 'Enter') saveRename(item.id);
                                   if (e.key === 'Escape') setRenameId(null);
                                 }}
-                                className="w-full px-2 py-1 bg-slate-700 text-slate-200 rounded text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                                className="w-full px-2 py-1 bg-gray-900 text-gray-200 rounded text-xs focus:outline-none focus:ring-1 focus:ring-white"
                               />
                             ) : (
                               <>
-                                <p className="text-sm text-slate-300 truncate cursor-pointer hover:text-slate-100">
+                                <p className="text-sm text-gray-300 truncate cursor-pointer hover:text-white">
                                   {item.title}
                                 </p>
-                                <p className="text-xs text-slate-500">{item.timestamp}</p>
+                                <p className="text-xs text-gray-600">{item.timestamp}</p>
                               </>
                             )}
                           </div>
@@ -391,9 +391,9 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                           <button
                             data-menu-trigger
                             onClick={(e) => toggleMenu(e, item.id)}
-                            className="p-1 hover:bg-slate-700 rounded transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0"
+                            className="p-1 hover:bg-gray-800 rounded transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0"
                           >
-                            <MoreVertical className="w-4 h-4 text-slate-400" />
+                            <MoreVertical className="w-4 h-4 text-gray-500" />
                           </button>
 
                           {/* Portal Dropdown Menu */}
@@ -421,7 +421,7 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                   padding: '12px',
                 }}
               >
-                <p className="text-xs text-slate-500 italic">
+                <p className="text-xs text-gray-500 italic">
                   Hints first.<br />Answers later.
                 </p>
               </div>
@@ -443,13 +443,14 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
             >
               {/* Header Avatar */}
               <div
-                className="rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0"
+                className="rounded-xl bg-white flex items-center justify-center flex-shrink-0"
                 style={{
                   width: '40px',
                   height: '40px',
+                  color: '#000000',
                 }}
               >
-                <span className="text-lg font-bold text-white">M</span>
+                <span className="text-lg font-bold text-black">M</span>
               </div>
 
               {/* Nav Icons */}
@@ -468,8 +469,8 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                       key={item.id}
                       className={`rounded-lg flex items-center justify-center flex-shrink-0 ${
                         item.active
-                          ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border border-purple-500/30'
-                          : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/50'
+                          ? 'bg-white text-black border border-white'
+                          : 'text-gray-600 hover:text-white hover:bg-gray-900/50'
                       }`}
                       style={{
                         width: '40px',
@@ -489,7 +490,7 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
               {/* Toggle Button - Bottom */}
               <button
                 onClick={onToggleCollapse}
-                className="p-1 hover:bg-slate-800 rounded-lg flex-shrink-0 mt-auto"
+                className="p-1 hover:bg-gray-900 rounded-lg flex-shrink-0 mt-auto"
                 title="Expand"
                 style={{
                   display: 'flex',
@@ -506,20 +507,20 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
 
       {/* Mobile Sidebar */}
       {isMobile && (
-        <div className="w-64 h-full flex flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 overflow-y-auto">
+        <div className="w-64 h-full flex flex-col bg-black overflow-y-auto">
           {/* Header */}
-          <div className="p-6 border-b border-slate-800 flex items-center justify-between shrink-0">
+          <div className="p-6 border-b border-gray-900 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                <span className="text-lg font-bold text-white">M</span>
+              <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center">
+                <span className="text-lg font-bold text-black">M</span>
               </div>
               <div>
                 <p className="text-sm font-bold text-white">MathMind</p>
-                <p className="text-xs text-slate-400">AI Tutor</p>
+                <p className="text-xs text-gray-500">AI Tutor</p>
               </div>
             </div>
-            <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-lg">
-              <X className="w-5 h-5 text-slate-300" />
+            <button onClick={onClose} className="p-2 hover:bg-gray-900 rounded-lg">
+              <X className="w-5 h-5 text-gray-400" />
             </button>
           </div>
 
@@ -532,8 +533,8 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                   key={item.id}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${
                     item.active
-                      ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border border-purple-500/30'
-                      : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/50'
+                      ? 'bg-white text-black border border-white'
+                      : 'text-gray-600 hover:text-white hover:bg-gray-900/50'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -544,8 +545,8 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
           </nav>
 
           {/* Grade Selector - Mobile */}
-          <div className="px-4 py-6 border-t border-slate-800 shrink-0">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
+          <div className="px-4 py-6 border-t border-gray-900 shrink-0">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">
               Current Grade
             </p>
             <div className="flex flex-col gap-2">
@@ -555,8 +556,8 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                   onClick={() => setGrade(g.id)}
                   className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     grade === g.id
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                      : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                      ? 'bg-white text-black shadow-lg'
+                      : 'bg-gray-900 text-gray-400 hover:bg-gray-800'
                   }`}
                 >
                   {g.label}
@@ -566,21 +567,21 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
           </div>
 
           {/* History - Mobile */}
-          <div className="flex-1 px-4 py-6 border-t border-slate-800 overflow-y-auto">
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
+          <div className="flex-1 px-4 py-6 border-t border-gray-900 overflow-y-auto">
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">
               Chat History
             </h3>
             
             {history.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
-                <p className="text-xs text-slate-500">No chats yet</p>
-                <p className="text-xs text-slate-600 mt-1">Start solving</p>
+                <p className="text-xs text-gray-600">No chats yet</p>
+                <p className="text-xs text-gray-700 mt-1">Start solving</p>
               </div>
             ) : (
               <div className="space-y-2">
                 {history.map((item) => (
                   <div key={item.id} className="relative group">
-                    <div className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
+                    <div className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-900 transition-colors">
                       <div className="flex-1 min-w-0">
                         {renameId === item.id ? (
                           <input
@@ -592,14 +593,14 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                               if (e.key === 'Enter') saveRename(item.id);
                               if (e.key === 'Escape') setRenameId(null);
                             }}
-                            className="w-full px-2 py-1 bg-slate-700 text-slate-200 rounded text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                            className="w-full px-2 py-1 bg-gray-900 text-gray-200 rounded text-xs focus:outline-none focus:ring-1 focus:ring-white"
                           />
                         ) : (
                           <>
-                            <p className="text-sm text-slate-300 truncate cursor-pointer hover:text-slate-100">
+                            <p className="text-sm text-gray-300 truncate cursor-pointer hover:text-white">
                               {item.title}
                             </p>
-                            <p className="text-xs text-slate-500">{item.timestamp}</p>
+                            <p className="text-xs text-gray-600">{item.timestamp}</p>
                           </>
                         )}
                       </div>
@@ -608,9 +609,9 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
                       <button
                         data-menu-trigger
                         onClick={(e) => toggleMenu(e, item.id)}
-                        className="p-1 hover:bg-slate-700 rounded transition-colors flex-shrink-0"
+                        className="p-1 hover:bg-gray-900 rounded transition-colors flex-shrink-0"
                       >
-                        <MoreVertical className="w-4 h-4 text-slate-400" />
+                        <MoreVertical className="w-4 h-4 text-gray-400" />
                       </button>
 
                       {/* Dropdown Menu - Mobile */}
@@ -630,8 +631,8 @@ function SidebarContent({ isOpen, onClose, isCollapsed = false, onToggleCollapse
           </div>
 
           {/* Footer */}
-          <div className="p-4 border-t border-slate-800 text-center shrink-0">
-            <p className="text-xs text-slate-500 italic">
+          <div className="p-4 border-t border-gray-900 text-center shrink-0">
+            <p className="text-xs text-gray-600 italic">
               Hints first.<br />Answers later.
             </p>
           </div>

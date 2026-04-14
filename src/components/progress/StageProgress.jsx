@@ -68,9 +68,9 @@ export function StageProgress({ currentStage, hasStarted }) {
                     fontSize: '14px',
                     fontWeight: '700',
                     transition: 'all 0.3s ease',
-                    backgroundColor: isCompleted ? '#6366f1' : isCurrent ? '#09090b' : '#27272a',
-                    color: isCompleted ? '#ffffff' : isCurrent ? '#6366f1' : '#52525b',
-                    border: isCurrent ? '2px solid #6366f1' : isCompleted ? 'none' : '2px solid #27272a',
+                    backgroundColor: isCompleted ? '#ffffff' : isCurrent ? '#09090b' : '#27272a',
+                    color: isCompleted ? '#000000' : isCurrent ? '#ffffff' : '#52525b',
+                    border: isCurrent ? '2px solid #ffffff' : isCompleted ? 'none' : '2px solid #27272a',
                     animation: isCurrent ? 'pulseRing 2s infinite' : 'none',
                   }}
                 >
@@ -82,7 +82,7 @@ export function StageProgress({ currentStage, hasStarted }) {
                     marginTop: '6px',
                     fontWeight: '600',
                     transition: 'color 0.3s ease',
-                    color: isCompleted || isCurrent ? '#6366f1' : '#52525b',
+                    color: isCompleted || isCurrent ? '#ffffff' : '#52525b',
                   }}
                 >
                   {stage.label}
@@ -95,7 +95,7 @@ export function StageProgress({ currentStage, hasStarted }) {
                   style={{
                     height: '2px',
                     width: '100%',
-                    backgroundColor: index < activeIndex ? '#6366f1' : '#27272a',
+                    backgroundColor: index < activeIndex ? '#ffffff' : '#27272a',
                     transition: 'background-color 0.5s ease',
                     marginTop: '-24px',
                   }}

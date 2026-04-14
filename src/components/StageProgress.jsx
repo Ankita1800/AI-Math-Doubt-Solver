@@ -35,9 +35,9 @@ export default function StageProgress({ currentStage, hasStarted }) {
                     text-sm font-bold transition-all duration-300
                     ${
                       isCompleted
-                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
+                        ? 'bg-white text-black shadow-md'
                         : isCurrent
-                        ? 'bg-white border-2 border-indigo-600 text-indigo-600 animate-ring-pulse'
+                        ? 'bg-gray-900 border-2 border-white text-white animate-ring-pulse'
                         : 'bg-gray-100 text-gray-400 border-2 border-gray-200'
                     }
                   `}
@@ -49,9 +49,9 @@ export default function StageProgress({ currentStage, hasStarted }) {
                     text-xs mt-1 font-medium transition-colors duration-300
                     ${
                       isCompleted
-                        ? 'text-indigo-600'
+                        ? 'text-white'
                         : isCurrent
-                        ? 'text-indigo-700 font-semibold'
+                        ? 'text-white font-semibold'
                         : 'text-gray-400'
                     }
                   `}
@@ -65,7 +65,7 @@ export default function StageProgress({ currentStage, hasStarted }) {
                 <div
                   className={`
                     h-0.5 w-full -mt-4 transition-colors duration-500
-                    ${index < activeIndex ? 'bg-indigo-500' : 'bg-gray-200'}
+                    ${index < activeIndex ? 'bg-white' : 'bg-gray-200'}
                   `}
                 />
               )}

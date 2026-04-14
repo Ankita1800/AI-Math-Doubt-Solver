@@ -29,9 +29,9 @@ export default function TopicChips({ onSelect }) {
           onClick={() => onSelect(topic)}
           className={`
             px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium
-            bg-gradient-to-r from-slate-700 to-slate-800
-            text-slate-300 hover:text-white
-            border border-slate-600 hover:border-slate-500
+            bg-gray-900
+            text-gray-400 hover:text-white
+            border border-gray-800 hover:border-gray-700
             transition-all duration-200
             whitespace-nowrap
           `}

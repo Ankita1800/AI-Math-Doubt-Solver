@@ -20,8 +20,8 @@ export default function GradeSelector({ grade, setGrade }) {
             active:scale-95
             ${
               grade === g.value
-                ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-200'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300 hover:text-indigo-600 hover:shadow-sm'
+                ? 'bg-white text-black border-white shadow-md'
+                : 'bg-gray-900 text-gray-300 border-gray-800 hover:border-gray-700 hover:text-white hover:shadow-sm'
             }
           `}
         >

@@ -24,8 +24,8 @@ export function GradeSelectorPills({ isCompact = false }) {
               w-8 h-8 rounded-lg text-xs font-medium transition-all duration-200 flex items-center justify-center
               ${
                 grade === g.id
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  ? 'bg-white text-black shadow-lg'
+                  : 'bg-gray-900 text-gray-400 hover:bg-gray-800'
               }
             `}
             title={g.label}
@@ -39,7 +39,7 @@ export function GradeSelectorPills({ isCompact = false }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+      <label className="text-xs font-semibold text-gray-500 uppercase tracking-widest">
         Current Grade
       </label>
       <div className="flex flex-wrap gap-2">
@@ -53,8 +53,8 @@ export function GradeSelectorPills({ isCompact = false }) {
               px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
               ${
                 grade === g.id
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  ? 'bg-white text-black shadow-lg'
+                  : 'bg-gray-900 text-gray-400 hover:bg-gray-800'
               }
             `}
           >

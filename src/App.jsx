@@ -65,10 +65,10 @@ export default function App() {
               transition={{ duration: 0.6 }}
               className="text-center mb-12 w-full"
             >
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-300 via-pink-300 to-blue-300 bg-clip-text text-transparent leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-white leading-tight">
                 What do you want to solve today?
               </h2>
-              <p className="text-slate-400 text-base sm:text-lg md:text-lg font-medium">
+              <p className="text-gray-500 text-base sm:text-lg md:text-lg font-medium">
                 Hints first. Answers later. Learn the why.
               </p>
             </motion.div>
@@ -92,7 +92,7 @@ export default function App() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="w-full mb-12"
             >
-              <p className="text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4 text-center">
+              <p className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4 text-center">
                 Explore Topics
               </p>
               <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-2">
@@ -117,7 +117,7 @@ export default function App() {
       )}
 
       {/* Input - Fixed at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 border-t border-slate-800 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent p-4 md:p-6 backdrop-blur flex justify-center z-20">
+      <div className="fixed bottom-0 left-0 right-0 border-t border-gray-900 bg-gradient-to-t from-gray-950/95 via-gray-950/50 to-transparent p-4 md:p-6 backdrop-blur flex justify-center z-20">
         <div className="w-full max-w-2xl">
           <ProblemInput
             problem={problem}

@@ -15,8 +15,8 @@ export default function ActionButtons({ currentStage, onNextStep, onSolution, on
             flex items-center justify-center gap-2
             ${
               isLoading
-                ? 'bg-indigo-300 text-white/70 cursor-not-allowed opacity-50'
-                : 'bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98] shadow-md shadow-indigo-200 hover:shadow-lg'
+                ? 'bg-gray-700 text-gray-400 cursor-not-allowed opacity-50'
+                : 'bg-white text-black hover:bg-gray-100 active:scale-[0.98] shadow-md hover:shadow-lg'
             }
           `}
         >
@@ -46,8 +46,8 @@ export default function ActionButtons({ currentStage, onNextStep, onSolution, on
             flex items-center justify-center gap-2
             ${
               isLoading
-                ? 'bg-indigo-300 text-white/70 cursor-not-allowed opacity-50'
-                : 'bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98] shadow-md shadow-indigo-200 hover:shadow-lg'
+                ? 'bg-gray-700 text-gray-400 cursor-not-allowed opacity-50'
+                : 'bg-white text-black hover:bg-gray-100 active:scale-[0.98] shadow-md hover:shadow-lg'
             }
           `}
         >
@@ -67,11 +67,11 @@ export default function ActionButtons({ currentStage, onNextStep, onSolution, on
 
       {/* After solution — show completion card */}
       {currentStage === 'done' && (
-        <div className="bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-xl px-5 py-4 text-center">
-          <p className="text-sm text-emerald-700 font-medium mb-1">
+        <div className="bg-white border border-gray-300 rounded-xl px-5 py-4 text-center">
+          <p className="text-sm text-black font-medium mb-1">
             🎉 Did this help?
           </p>
-          <p className="text-xs text-emerald-600/70">
+          <p className="text-xs text-gray-600">
             Try solving a similar problem now to strengthen your understanding!
           </p>
         </div>
@@ -87,8 +87,8 @@ export default function ActionButtons({ currentStage, onNextStep, onSolution, on
           active:scale-[0.98]
           ${
             currentStage === 'done'
-              ? 'border-2 border-indigo-600 text-indigo-600 bg-white hover:bg-indigo-50'
-              : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700'
+              ? 'border-2 border-white text-white bg-black hover:bg-gray-900'
+              : 'bg-gray-900 text-gray-500 hover:bg-gray-800 hover:text-gray-400'
           }
         `}
       >

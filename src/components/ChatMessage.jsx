@@ -21,8 +21,8 @@ export function ChatMessage({ message, isLoading = false }) {
       className={`flex gap-3 mb-4 ${isAI ? 'justify-start' : 'justify-end'}`}
     >
       {isAI && (
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 mt-1">
-          <span className="text-xs font-bold text-white">AI</span>
+        <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center flex-shrink-0 mt-1">
+          <span className="text-xs font-bold text-black">AI</span>
         </div>
       )}
 
@@ -32,12 +32,12 @@ export function ChatMessage({ message, isLoading = false }) {
             p-4 rounded-2xl
             ${
               isAI
-                ? 'bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700'
-                : 'bg-gradient-to-br from-purple-600 to-pink-600'
+                ? 'bg-gray-900 border border-gray-800'
+                : 'bg-white'
             }
           `}
         >
-          <div className="text-sm leading-relaxed text-slate-100">
+          <div className={`text-sm leading-relaxed ${isAI ? 'text-gray-300' : 'text-black'}`}>
             {isLoading ? (
               <div className="flex gap-1">
                 <motion.div
@@ -72,13 +72,13 @@ export function ChatMessage({ message, isLoading = false }) {
           <div className="flex gap-2 mt-2">
             <button
               onClick={copyToClipboard}
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition text-slate-400 hover:text-white"
+              className="p-2 rounded-lg bg-gray-900 hover:bg-gray-800 transition text-gray-400 hover:text-white"
               title="Copy"
             >
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             </button>
             <button
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition text-slate-400 hover:text-white"
+              className="p-2 rounded-lg bg-gray-900 hover:bg-gray-800 transition text-gray-400 hover:text-white"
               title="Save"
             >
               <Bookmark className="w-4 h-4" />

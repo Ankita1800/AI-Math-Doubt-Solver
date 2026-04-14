@@ -3,7 +3,7 @@ export default function Header() {
     <header className="text-center pt-6 pb-4 px-4">
       <div className="flex items-center justify-center gap-2 mb-1">
         <span className="text-3xl">🧠</span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-indigo-700 tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
           MathMind
         </h1>
       </div>
