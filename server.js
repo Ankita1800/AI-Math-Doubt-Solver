@@ -46,83 +46,66 @@ The student's problem is: ${problem}
 Your task: ${stagePrompts[stage]}
 Be friendly, clear, and concise.`;
 
-    // Try gemini-1.5-flash first, fallback to gemini-pro
-    let endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
-    let modelName = 'gemini-1.5-flash';
-    
-    const response = await fetch(`${endpoint}?key=${GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: fullPrompt }],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 1024,
-          topP: 0.95,
-        },
-      }),
-    });
+    const models = [
+      'models/gemini-2.0-flash:generateContent',
+      'models/gemini-1.5-pro:generateContent',
+      'models/gemini-1.5-flash:generateContent',
+      'models/gemini-pro:generateContent',
+    ];
 
-    // If 1.5-flash fails, try gemini-pro
-    if (!response.ok && response.status === 404) {
-      console.warn('gemini-1.5-flash not available, trying gemini-pro...');
-      endpoint = 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent';
-      modelName = 'gemini-pro';
-      
-      const response2 = await fetch(`${endpoint}?key=${GEMINI_API_KEY}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [{ text: fullPrompt }],
+    let data;
+    let modelUsed;
+    let lastError;
+
+    for (const model of models) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/${model}`;
+      console.log(`Trying model: ${model}`);
+
+      try {
+        const response = await fetch(`${endpoint}?key=${GEMINI_API_KEY}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [{ text: fullPrompt }],
+              },
+            ],
+            generationConfig: {
+              temperature: 0.7,
+              maxOutputTokens: 1024,
+              topP: 0.95,
             },
-          ],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 1024,
-            topP: 0.95,
-          },
-        }),
-      });
-      
-      if (!response2.ok) {
-        const errorData = await response2.text();
-        console.error(`${modelName} API error (${response2.status}):`, errorData);
-        return res.status(response2.status).json({
-          error: `Gemini API error: ${errorData}`,
+          }),
         });
-      }
 
-      const data = await response2.json();
-      if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-        const text = data.candidates[0].content.parts[0].text;
-        return res.json({ content: text });
+        if (response.ok) {
+          data = await response.json();
+          modelUsed = model;
+          console.log(`Successfully used model: ${modelUsed}`);
+          break;
+        } else {
+          const errorText = await response.text();
+          lastError = { status: response.status, message: errorText };
+          console.warn(`Model ${model} failed (${response.status}):`, errorText.substring(0, 100));
+        }
+      } catch (error) {
+        lastError = { error: error.message };
+        console.warn(`Error trying model ${model}:`, error.message);
       }
-
-      return res.status(500).json({
-        error: 'Unexpected response format from Gemini API',
-        data: data,
-      });
     }
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error(`Gemini API error (${response.status}):`, errorData);
-      return res.status(response.status).json({
-        error: `Gemini API error: ${errorData}`,
+    if (!data || !modelUsed) {
+      const errorMsg = typeof lastError?.message === 'string' 
+        ? lastError.message 
+        : JSON.stringify(lastError);
+      console.error('All Gemini models failed. Last error:', lastError);
+      return res.status(lastError?.status || 500).json({
+        error: `No available Gemini models. Status: ${lastError?.status}. ${errorMsg.substring(0, 200)}`,
       });
     }
-
-    const data = await response.json();
 
     if (data.candidates && data.candidates[0] && data.candidates[0].content) {
       const text = data.candidates[0].content.parts[0].text;
