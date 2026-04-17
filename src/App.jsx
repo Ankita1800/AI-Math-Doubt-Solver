@@ -51,11 +51,15 @@ export default function App() {
     }
   };
 
+  const hasMessages = messages.length > 0;
+
   const content = (
-    <>
-      {messages.length === 0 ? (
-        // Home Screen - Perfectly Centered
-        <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8 md:py-12">
+    <div className="w-full flex flex-col overflow-hidden" style={{ height: '100%' }}>
+      {/* Content Area - Changes based on state */}
+      {!hasMessages ? (
+        // ========== EMPTY STATE ==========
+        // Centered layout with overflow scrolling if needed on small screens
+        <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 md:py-12 overflow-y-auto">
           {/* Main Container */}
           <div className="w-full max-w-4xl flex flex-col items-center">
             {/* Heading Section */}
@@ -102,23 +106,34 @@ export default function App() {
           </div>
         </div>
       ) : (
-        // Chat Screen
-        <div className="w-full max-w-2xl mx-auto px-4 py-6 pb-32">
-          {messages.map((msg) => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
-          {isLoading && (
-            <ChatMessage
-              message={{ role: 'assistant', content: '', type: 'text' }}
-              isLoading={true}
-            />
-          )}
+        // ========== ACTIVE CHAT STATE ==========
+        // Scrollable messages
+        <div className="flex-1 overflow-y-auto">
+          <div className="w-full max-w-2xl mx-auto px-4 py-6">
+            {messages.map((msg) => (
+              <ChatMessage key={msg.id} message={msg} />
+            ))}
+            {isLoading && (
+              <ChatMessage
+                message={{ role: 'assistant', content: '', type: 'text' }}
+                isLoading={true}
+              />
+            )}
+          </div>
         </div>
       )}
 
-      {/* Input - Fixed at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 border-t border-gray-900 bg-gradient-to-t from-gray-950/95 via-gray-950/50 to-transparent p-4 md:p-6 backdrop-blur flex justify-center z-20">
-        <div className="w-full max-w-2xl">
+      {/* Input Area - Always visible at bottom */}
+      {hasMessages && (
+        <div className="shrink-0 border-t border-gray-900 bg-black px-4 md:px-6 py-3">
+          <div className="w-full max-w-2xl mx-auto flex items-center justify-center gap-2 sm:gap-3 mb-3">
+            <ActionButtons onSelect={handleActionSelect} />
+          </div>
+        </div>
+      )}
+      
+      <div className="shrink-0 border-t border-gray-900 bg-black p-4 md:p-6">
+        <div className="w-full max-w-2xl mx-auto">
           <ProblemInput
             problem={problem}
             setProblem={setProblem}
@@ -127,7 +142,7 @@ export default function App() {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 
   return <Layout>{content}</Layout>;

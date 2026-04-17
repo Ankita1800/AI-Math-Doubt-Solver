@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 // Middleware
 app.use(cors());
@@ -18,7 +18,7 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend server is running' });
 });
 
-// Main Gemini API endpoint
+// Main Groq API endpoint (OpenAI-compatible)
 app.post('/api/ask-gemini', async (req, res) => {
   try {
     const { problem, grade, stage } = req.body;
@@ -29,9 +29,9 @@ app.post('/api/ask-gemini', async (req, res) => {
       });
     }
 
-    if (!GEMINI_API_KEY) {
+    if (!GROQ_API_KEY) {
       return res.status(500).json({
-        error: 'GEMINI_API_KEY is not configured. Please set it in .env file',
+        error: 'GROQ_API_KEY is not configured. Please set it in .env file',
       });
     }
 
@@ -46,74 +46,47 @@ The student's problem is: ${problem}
 Your task: ${stagePrompts[stage]}
 Be friendly, clear, and concise.`;
 
-    const models = [
-      'models/gemini-2.0-flash:generateContent',
-      'models/gemini-1.5-pro:generateContent',
-      'models/gemini-1.5-flash:generateContent',
-      'models/gemini-pro:generateContent',
-    ];
-
-    let data;
-    let modelUsed;
-    let lastError;
-
-    for (const model of models) {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/${model}`;
-      console.log(`Trying model: ${model}`);
-
-      try {
-        const response = await fetch(`${endpoint}?key=${GEMINI_API_KEY}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+    // Use Groq API with OpenAI-compatible format
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant', // Currently available Groq model
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful math tutor. Provide clear, concise explanations.',
           },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [{ text: fullPrompt }],
-              },
-            ],
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 1024,
-              topP: 0.95,
-            },
-          }),
-        });
+          {
+            role: 'user',
+            content: fullPrompt,
+          },
+        ],
+        temperature: 0.7,
+        max_tokens: 1024,
+      }),
+    });
 
-        if (response.ok) {
-          data = await response.json();
-          modelUsed = model;
-          console.log(`Successfully used model: ${modelUsed}`);
-          break;
-        } else {
-          const errorText = await response.text();
-          lastError = { status: response.status, message: errorText };
-          console.warn(`Model ${model} failed (${response.status}):`, errorText.substring(0, 100));
-        }
-      } catch (error) {
-        lastError = { error: error.message };
-        console.warn(`Error trying model ${model}:`, error.message);
-      }
-    }
-
-    if (!data || !modelUsed) {
-      const errorMsg = typeof lastError?.message === 'string' 
-        ? lastError.message 
-        : JSON.stringify(lastError);
-      console.error('All Gemini models failed. Last error:', lastError);
-      return res.status(lastError?.status || 500).json({
-        error: `No available Gemini models. Status: ${lastError?.status}. ${errorMsg.substring(0, 200)}`,
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Groq API error:', response.status, errorText);
+      return res.status(response.status).json({
+        error: `Groq API error: ${errorText}`,
       });
     }
 
-    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-      const text = data.candidates[0].content.parts[0].text;
+    const data = await response.json();
+
+    if (data.choices && data.choices[0] && data.choices[0].message) {
+      const text = data.choices[0].message.content;
       return res.json({ content: text });
     }
 
     return res.status(500).json({
-      error: 'Unexpected response format from Gemini API',
+      error: 'Unexpected response format from Groq API',
       data: data,
     });
   } catch (error) {
@@ -128,7 +101,8 @@ Be friendly, clear, and concise.`;
 app.listen(PORT, () => {
   console.log(`🚀 Backend server running on http://localhost:${PORT}`);
   console.log(`📝 API endpoint: http://localhost:${PORT}/api/ask-gemini`);
-  if (!GEMINI_API_KEY) {
-    console.warn('⚠️  GEMINI_API_KEY not set in .env file');
+  console.log(`🔑 Using Groq API for faster inference`);
+  if (!GROQ_API_KEY) {
+    console.warn('⚠️  GROQ_API_KEY not set in .env file');
   }
 });

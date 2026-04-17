@@ -1,8 +1,8 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'http://localhost:5002/api';
 
-export async function solveProblem(problem, grade = '9-10', mode = 'hint') {
+export async function solveProblem(problem, grade = 'Grade 9-10', mode = 'hint') {
   try {
-    const response = await fetch(`${API_BASE_URL}/solve`, {
+    const response = await fetch(`${API_BASE_URL}/ask-gemini`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -10,7 +10,7 @@ export async function solveProblem(problem, grade = '9-10', mode = 'hint') {
       body: JSON.stringify({
         problem,
         grade,
-        mode,
+        stage: mode, // Backend expects 'stage', not 'mode'
       }),
     });
 
@@ -19,10 +19,16 @@ export async function solveProblem(problem, grade = '9-10', mode = 'hint') {
     }
 
     const data = await response.json();
-    return data;
+    return {
+      success: true,
+      solution: data.content, // Extract content from Groq response
+    };
   } catch (error) {
     console.error('Error calling solve API:', error);
-    throw error;
+    return {
+      success: false,
+      error: error.message,
+    };
   }
 }
 
