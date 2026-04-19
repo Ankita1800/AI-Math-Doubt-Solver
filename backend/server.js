@@ -8,16 +8,47 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Get allowed origins from environment or use defaults
+const allowedOrigins = [
+  'http://localhost:5173', // Local dev
+  'http://localhost:3000',  // Alternate local dev
+  process.env.FRONTEND_URL, // Vercel/production frontend URL
+].filter(Boolean);
+
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5174',
-  methods: ['GET', 'POST'],
-  credentials: true
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    return callback(new Error('CORS not allowed'));
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true,
+  maxAge: 3600
 }));
+
 app.use(express.json());
 
+// Validate API Key
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+if (!GEMINI_API_KEY) {
+  console.error('ERROR: GEMINI_API_KEY environment variable is not set');
+  process.exit(1);
+}
+
 // Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.VITE_GEMINI_API_KEY);
+let genAI;
+try {
+  genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+} catch (error) {
+  console.error('ERROR: Failed to initialize Gemini:', error.message);
+  process.exit(1);
+}
 
 // System prompts for different modes
 const SYSTEM_PROMPTS = {
@@ -43,29 +74,41 @@ const SYSTEM_PROMPTS = {
     - Be encouraging and supportive`
 };
 
-// Solve endpoint
+/**
+ * POST /api/solve
+ * Solve a math problem using Gemini API
+ */
 app.post('/api/solve', async (req, res) => {
   try {
     const { problem, grade = '9-10', mode = 'hint' } = req.body;
 
+    // Validate input
     if (!problem || !problem.trim()) {
-      return res.status(400).json({ error: 'Problem statement is required' });
+      return res.status(400).json({ 
+        success: false,
+        error: 'Problem statement is required' 
+      });
     }
 
     if (!['hint', 'nextStep', 'solution'].includes(mode)) {
-      return res.status(400).json({ error: 'Invalid mode. Use: hint, nextStep, or solution' });
+      return res.status(400).json({ 
+        success: false,
+        error: 'Invalid mode. Use: hint, nextStep, or solution' 
+      });
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-
+    // Build prompt
+    const systemPrompt = SYSTEM_PROMPTS[mode] || SYSTEM_PROMPTS.hint;
     const fullPrompt = `You are a mathematics tutor for ${grade} students following the CBSE/NCERT curriculum in India.
 
-${SYSTEM_PROMPTS[mode]}
+${systemPrompt}
 
 Student's Problem: ${problem}
 
 Provide your response now:`;
 
+    // Call Gemini API
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
     const result = await model.generateContent(fullPrompt);
     const response = result.response;
     const text = response.text();
@@ -78,29 +121,86 @@ Provide your response now:`;
       solution: text,
       timestamp: new Date().toISOString()
     });
+
   } catch (error) {
     console.error('Error in /api/solve:', error);
+    
+    // Handle specific API errors
+    let errorMessage = error.message || 'Failed to generate solution';
+    
+    if (error.message?.includes('API_KEY')) {
+      errorMessage = 'API key error - please check backend configuration';
+    } else if (error.message?.includes('quota')) {
+      errorMessage = 'API quota exceeded - please try again later';
+    }
+
     return res.status(500).json({
+      success: false,
       error: 'Failed to generate solution',
-      message: error.message
+      message: errorMessage
     });
   }
 });
 
-// Health check
+/**
+ * GET /api/health
+ * Health check endpoint
+ */
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'MathMind API is running' });
+  res.json({ 
+    status: 'ok', 
+    message: 'MathMind API is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
+/**
+ * GET /
+ * Root endpoint - API info
+ */
+app.get('/', (req, res) => {
+  res.json({ 
+    name: 'MathMind Backend API', 
+    version: '1.0.0',
+    endpoints: {
+      solve: 'POST /api/solve',
+      health: 'GET /api/health'
+    },
+    status: 'operational'
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ 
+    error: 'Not found',
+    path: req.path
+  });
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Internal server error', message: err.message });
+  console.error('Error:', err.stack);
+  
+  // CORS errors
+  if (err.message === 'CORS not allowed') {
+    return res.status(403).json({ 
+      error: 'CORS error',
+      message: 'This origin is not allowed to access this API'
+    });
+  }
+
+  res.status(500).json({ 
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'An error occurred'
+  });
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`\n🚀 MathMind Backend API running on port ${PORT}`);
-  console.log(`📝 API Endpoint: http://localhost:${PORT}/api/solve`);
-  console.log(`❤️  Health Check: http://localhost:${PORT}/api/health\n`);
+  console.log(`\n MathMind Backend API running on port ${PORT}`);
+  console.log(`API Endpoint: http://localhost:${PORT}/api/solve`);
+  console.log(`Health Check: http://localhost:${PORT}/api/health`);
+  console.log(`Allowed Origins:`, allowedOrigins);
+  console.log(`Gemini API: ${genAI ? 'Connected' : 'ERROR'}\n`);
 });

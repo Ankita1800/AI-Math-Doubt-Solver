@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { askGemini } from '../api/gemini';
+import { solveProblem } from '../api/backend';
 
 export function useChat() {
   const [grade, setGrade] = useState('Grade 9-10');
@@ -27,12 +27,17 @@ export function useChat() {
 
     try {
       // Get hint
-      const hintText = await askGemini(problemText, grade, 'hint');
-      addMessage('assistant', hintText, 'hint');
+      const result = await solveProblem(problemText, grade, 'hint');
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to get hint');
+      }
+      
+      addMessage('assistant', result.solution, 'hint');
       setCurrentStage('hint');
     } catch (error) {
       console.error('Error fetching hint:', error);
-      addMessage('assistant', 'Sorry, I encountered an error. Please try again.', 'error');
+      addMessage('assistant', `Sorry, I encountered an error: ${error.message}. Please try again.`, 'error');
       setCurrentStage('error');
     } finally {
       setIsLoading(false);
@@ -47,18 +52,28 @@ export function useChat() {
     try {
       if (stage === 'hint') {
         // Get next step
-        const nextStepText = await askGemini(currentProblem, grade, 'nextStep');
-        addMessage('assistant', nextStepText, 'nextStep');
+        const result = await solveProblem(currentProblem, grade, 'nextStep');
+        
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to get next step');
+        }
+        
+        addMessage('assistant', result.solution, 'nextStep');
         setCurrentStage('nextStep');
       } else if (stage === 'nextStep') {
         // Get full solution
-        const solutionText = await askGemini(currentProblem, grade, 'solution');
-        addMessage('assistant', solutionText, 'solution');
+        const result = await solveProblem(currentProblem, grade, 'solution');
+        
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to get solution');
+        }
+        
+        addMessage('assistant', result.solution, 'solution');
         setCurrentStage('solution');
       }
     } catch (error) {
       console.error('Error fetching next stage:', error);
-      addMessage('assistant', 'Sorry, I encountered an error. Please try again.', 'error');
+      addMessage('assistant', `Sorry, I encountered an error: ${error.message}. Please try again.`, 'error');
     } finally {
       setIsLoading(false);
     }

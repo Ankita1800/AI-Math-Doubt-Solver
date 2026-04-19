@@ -1,5 +1,5 @@
 // API key from environment variable - set in .env file
-const BACKEND_URL = process.env.VITE_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 export async function askGemini(problem, grade, stage) {
   try {
