@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import axios from 'axios';
 
 dotenv.config();
 
@@ -35,18 +35,9 @@ app.use(cors({
 app.use(express.json());
 
 // Validate API Key
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-if (!GEMINI_API_KEY) {
-  console.error('ERROR: GEMINI_API_KEY environment variable is not set');
-  process.exit(1);
-}
-
-// Initialize Gemini
-let genAI;
-try {
-  genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-} catch (error) {
-  console.error('ERROR: Failed to initialize Gemini:', error.message);
+const NVIDIA_API_KEY = process.env.NVIDIA_API_KEY;
+if (!NVIDIA_API_KEY) {
+  console.error('ERROR: NVIDIA_API_KEY environment variable is not set');
   process.exit(1);
 }
 
@@ -107,11 +98,27 @@ Student's Problem: ${problem}
 
 Provide your response now:`;
 
-    // Call Gemini API
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-    const result = await model.generateContent(fullPrompt);
-    const response = result.response;
-    const text = response.text();
+    // Call NVIDIA NIM API via Axios
+    const invokeUrl = "https://integrate.api.nvidia.com/v1/chat/completions";
+    const payload = {
+      model: "google/gemma-4-31b-it",
+      messages: [{ role: "user", content: fullPrompt }],
+      max_tokens: 1024,
+      temperature: 0.2,
+      top_p: 0.95,
+      stream: false,
+      chat_template_kwargs: { enable_thinking: true }
+    };
+
+    const response = await axios.post(invokeUrl, payload, {
+      headers: {
+        "Authorization": `Bearer ${NVIDIA_API_KEY}`,
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    });
+    
+    const text = response.data.choices[0]?.message?.content || '';
 
     return res.json({
       success: true,
@@ -202,5 +209,5 @@ app.listen(PORT, () => {
   console.log(`API Endpoint: http://localhost:${PORT}/api/solve`);
   console.log(`Health Check: http://localhost:${PORT}/api/health`);
   console.log(`Allowed Origins:`, allowedOrigins);
-  console.log(`Gemini API: ${genAI ? 'Connected' : 'ERROR'}\n`);
+  console.log(`NVIDIA NIM API: ${NVIDIA_API_KEY ? 'Connected' : 'ERROR'}\n`);
 });
